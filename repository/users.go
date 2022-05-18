@@ -8,8 +8,8 @@ import (
 
 type UserRepository interface {
 	CreateUser(user model.Users) (model.Users, error)
+	GetUsers(offset int, limit int) ([]model.Users, error)
 	GetUser(ID int) (model.Users, error)
-	GetUsers() ([]model.Users, error)
 	UpdateUser(user model.Users) (model.Users, error)
 	DeleteUser(ID int) error
 }
@@ -22,15 +22,15 @@ func NewUserRepo(db *gorm.DB) *userRepository {
 	return &userRepository{db}
 }
 
+func (r *userRepository) GetUsers(offset int, limit int) ([]model.Users, error) {
+	var users []model.Users
+	err := r.db.Offset(offset).Limit(limit).Find(&users).Error
+	return users, err
+}
+
 func (r *userRepository) CreateUser(user model.Users) (model.Users, error) {
 	err := r.db.Create(&user).Error
 	return user, err
-}
-
-func (r *userRepository) GetUsers() ([]model.Users, error) {
-	var users []model.Users
-	err := r.db.Find(&users).Error
-	return users, err
 }
 
 func (r *userRepository) GetUser(ID int) (model.Users, error) {

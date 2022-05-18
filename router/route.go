@@ -17,14 +17,16 @@ func Router(db *gorm.DB) {
 			"message": "Hello Word",
 		})
 	})
+
 	userRepository := repository.NewUserRepo(db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
 	user := route.Group("/user")
+
 	user.POST("/", userHandler.CreateUser)
 	user.GET("/", userHandler.GetUsers)
 	user.GET("/:id", userHandler.GetUser)
-	user.POST("/:id", userHandler.UpdateUser)
+	user.PATCH("/:id", userHandler.UpdateUser)
 	user.DELETE("/:id", userHandler.DeleteUser)
 
 	route.Run()

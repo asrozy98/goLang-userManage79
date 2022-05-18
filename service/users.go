@@ -9,7 +9,7 @@ import (
 
 type UserService interface {
 	CreateUser(userRequest model.UsersRequest) (model.Users, error)
-	GetUsers() ([]model.Users, error)
+	GetUsers(offset int, limit int) ([]model.Users, error)
 	GetUser(id int) (model.Users, error)
 	UpdateUser(ID int, userRequest model.UsersRequest) (model.Users, error)
 	DeleteUser(ID int) error
@@ -34,9 +34,10 @@ func (s *userService) CreateUser(userRequest model.UsersRequest) (model.Users, e
 	return newUser, err
 }
 
-func (s *userService) GetUsers() ([]model.Users, error) {
-	return s.userRepository.GetUsers()
+func (s *userService) GetUsers(offset int, limit int) ([]model.Users, error) {
+	return s.userRepository.GetUsers(offset, limit)
 }
+
 func (s *userService) GetUser(ID int) (model.Users, error) {
 	return s.userRepository.GetUser(ID)
 }

@@ -46,6 +46,7 @@ func (handler *userHandler) CreateUser(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"success": true,
+		"message": "User created",
 		"data":    user,
 	})
 }
@@ -67,7 +68,7 @@ func (handler *userHandler) GetUsers(c *gin.Context) {
 	}
 
 	offset := (page - 1) * limit
-	users, err := handler.userService.GetUsers(offset, limit)
+	users, err, total := handler.userService.GetUsers(offset, limit)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"success": false,
@@ -78,8 +79,10 @@ func (handler *userHandler) GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"success": true,
-		"data":    users,
+		"success":      true,
+		"data":         users,
+		"perPageCount": len(users),
+		"allCount":     total,
 	})
 }
 
@@ -114,6 +117,7 @@ func (handler *userHandler) UpdateUser(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"success": true,
+		"message": "User updated",
 		"data":    user,
 	})
 }
